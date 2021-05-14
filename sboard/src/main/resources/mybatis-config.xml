@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org/DTD config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.cdj.sboard.entity.User" alias="user" />
+		<typeAlias type="com.cdj.sboard.entity.Board" alias="board" />
+	</typeAliases>
+	<typeHandlers>
+		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="com.cdj.sboard.entity.Level" />
+	</typeHandlers>
+</configuration>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdj.sboard.dao.BoardDao">
+	<insert id="insert" parameterType="board">
+		<selectKey order="BEFORE" resultType="int" keyProperty="bno">select board_seq.nextval from dual</selectKey>
+		insert into board values (#{bno}, #{title}, #{content}, #{writer}, sysdate, 0, #{attachmentCnt}, 0, 0, 0, 0)
+	</insert>
+	
+	<select id="findAll" resultType="board">
+		<![CDATA[
+			select * from
+				(
+					select rownum as rnum, b.* from 
+						(
+							select /*+ index_desc(board board_pk_bno)*/ bno,title,writer, writeTime, readCnt, 
+							attachmentCnt, commentCnt from board
+						) b
+					where rownum<=#{endRowNum}
+				)
+			where rnum>=#{startRowNum}
+		]]>
+	</select>
+	
+	<select id="findByBno" resultType="board">
+		select * from board where bno=#{bno}
+	</select>
+	
+	<select id="count" resultType="int">
+		select /*+ index_ffs(board board_pk_bno) */ count(bno) from board
+	</select>
+	
+	<update id="update">
+	update board 
+	<trim prefix="set" suffixOverrides=",">
+		<if test="readCnt==1">readCnt=readCnt+1,</if>
+		<if test="commentCnt==1">commentCnt=commentCnt+1,</if>
+	</trim>
+	where bno=#{bno} and rownum=1 
+	</update>
+	
+	<delete id="delete">
+		delete from board where bno=#{bno}
+	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
