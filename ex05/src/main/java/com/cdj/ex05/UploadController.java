@@ -1,5 +1,8 @@
 package com.cdj.ex05;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +14,8 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @Log4j
 public class UploadController {
+	
+	String uploadFolder = "C:\\upload";
 	
 	@GetMapping("/uploadForm")
 	public void uploadForm() {
@@ -25,6 +30,13 @@ public class UploadController {
 			log.info("Upload File Size: " + multipartFile.getSize());
 			
 			File saveFile = new File(uploadFolder, multipartFile.getOriginalFilename());
+			
+			try {
+				multipartFile.transferTo(saveFile);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
+			
 		}
 	}
 }
