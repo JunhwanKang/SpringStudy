@@ -44,7 +44,7 @@
 			console.log(files);
 			
 			for(var i=0; i<files.length; i++){
-				if(!checkExtension(file[i].name, files[i].size)){
+				if(!checkExtension(files[i].name, files[i].size)){
 					return false;
 				}
 				

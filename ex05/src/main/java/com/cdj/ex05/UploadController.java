@@ -1,6 +1,8 @@
 package com.cdj.ex05;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +23,7 @@ public class UploadController {
 		log.info("upload form");
 	}
 	
-	/*
+	
 	@PostMapping("/uploadFormAction")
 	public void uploadFormPost(MultipartFile[] uploadFile, Model model) {
 		for(MultipartFile multipartFile : uploadFile) {
@@ -39,10 +41,20 @@ public class UploadController {
 			
 		}
 	}
-	*/
+	
 	@GetMapping("/uploadAjax")
 	public void uploadAjax() {
 		log.info("upload ajax");
+	}
+	
+	private String getFolder() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date date = new Date();
+		
+		String str = sdf.format(date);
+		
+		return str.replace("-", File.separator);
 	}
 	
 	@PostMapping("/uploadAjaxAction")
@@ -50,6 +62,13 @@ public class UploadController {
 		
 		String uploadFolder = "C:\\upload";
 		log.info("update ajax post..........");
+		
+		File uploadPath = new File(uploadFolder, getFolder());
+		log.info("upload path: " + uploadPath);
+		
+		if(uploadPath.exists() == false) {
+			uploadPath.mkdirs();
+		}
 		
 		for(MultipartFile multipartFile : uploadFile) {
 			log.info("============================");
@@ -62,14 +81,13 @@ public class UploadController {
 			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\")+1);
 			log.info("only file name: " + uploadFileName);
 			
-			File saveFile = new File(uploadFolder, multipartFile.getOriginalFilename());
+			File saveFile = new File(uploadPath, uploadFileName);
 			
 			try {
 				multipartFile.transferTo(saveFile);
 			} catch (Exception e) {
 				log.error(e.getMessage());
 			}
-			
 		}
 	}
 }
