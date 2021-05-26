@@ -11,7 +11,15 @@
 	<div class="uploadDiv">
 		<input type="file" name="uploadFile" multiple>
 	</div>
+	
 	<button id="uploadBtn">Upload</button>
+	
+	<div class='uploadResult'>
+		<ul>
+			
+		</ul>
+	</div>
+		
 	
 	<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
 
@@ -32,6 +40,16 @@
 				return false;
 			}
 			return true;
+		}
+		
+		var uploadResult = $(".uploadResult ul");
+		
+		function showUploadedFile(uploadResultArr) {
+			var str = "";
+			$(uploadResultArr).each(function(i, obj) {
+				str += "<li>" + obj.fileName + "</li>";
+			});
+			uploadResult.append(str);
 		}
 		
 		var cloneObj = $(".uploadDiv").clone();
@@ -62,6 +80,8 @@
 				dataType: 'json',
 				success: function(result){
 					console.log(result);
+					
+					showUploadedFile(result);
 					
 					$(".uploadDiv").html(cloneObj.html());
 				}
