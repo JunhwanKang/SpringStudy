@@ -84,7 +84,7 @@ public class UploadController {
 	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<AttachFileDTO>> uploadAjaxPost(MultipartFile[] uploadFile) {
-		List<AttachFileDTO> list = new ArrayList();
+		List<AttachFileDTO> list = new ArrayList<AttachFileDTO>();
 		
 		String uploadFolder = "C:\\upload";
 		log.info("update ajax post..........");
@@ -124,6 +124,8 @@ public class UploadController {
 				attachDTO.setUploadPath(uploadFolderPath);
 				
 				if(checkImageType(saveFile)) {
+					attachDTO.setImage(true);
+					
 					FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
 					
 					Thumbnailator.createThumbnail(multipartFile.getInputStream(), thumbnail, 100, 100);
